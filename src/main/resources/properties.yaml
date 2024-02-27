@@ -1,0 +1,11 @@
+app:
+  version: "@app.version@" # replaced through Maven resource filtering
+
+# set anypoint.platform.gatekeeper=disabled as a Java system property to prevent the gatekeeper from blocking
+# this API implementation if the following properties are not correct
+anypoint:
+  platform:
+    client_id:     ""  # users must set this to their Anypoint Platform org, BG, or environment's client ID
+    client_secret: ""  # users must set this to the client secret for that client ID
+tokenization:
+  api_id: "1" # users must set this to match the API instance ID in their chosen Anypoint Platform environment in API Manager

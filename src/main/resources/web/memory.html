@@ -1,0 +1,134 @@
+<html ng-app="rtfclusterdemo">
+
+<head>
+   <title>MuleSoft Training</title> 
+   <!-- Load JS libraries -->
+   
+   <script src="/js/angular-1.4.8.min.js"></script>
+   <script src="/js/bootstrap-3.3.1.min.js"></script>
+   <script src="/js/commons.js"></script>
+   <script src="/js/pagination.min.js"></script>
+   <script src="/js/jquery-3.1.1.min.js"></script>
+   
+   <!-- CSS files -->
+  	<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="all">
+	<link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css" media="all">
+	<link rel="stylesheet" type="text/css" href="/css/mu.css" media="all">
+</head>
+
+<body class="grey-bg">
+
+	<script>
+      function showElement(id) {
+          document.getElementById(id).style.visibility = 'visible';
+      }
+
+      function hideElement(id) {
+          document.getElementById(id).style.visibility = 'hidden';
+      }
+
+      function removeElement(id) {
+         document.getElementById(id).remove();
+      }
+
+      var app = angular.module("rtfclusterdemo", []);
+      
+      app.controller("memstatsController", function($scope, $http) {
+          $scope.results = [];
+          $scope.sortKey = 'applicationID';
+          $scope.reverse = false;
+
+          $http.get("/api/memory").success(function (response) {
+            $scope.results = response;
+            removeElement('loadingView');
+            showElement('statsResultsView');
+          });
+
+          $scope.parJson = function (json) {
+             return angular.fromJson(json);
+          }
+
+       });  
+      </script>
+
+	<div id="title-bar">
+		<img src="https://www.mulesoft.com/sites/default/files/training.png"
+			class="title-bar-logo"> MuleSoft Training
+	</div>
+
+	<div id="sub-title-bar">
+		<table>
+			<tr>
+				<td><a href="http://www.mulesoft.com">MuleSoft Home</a></td>
+				<td><a href="https://anypoint.mulesoft.com/login/">Anypoint Platform Login</a></td>
+				<td><a href="http://training.mulesoft.com">MuleSoft Training</a></td>
+				<td><a href="https://docs.mulesoft.com/general/">Documentation</a></td>
+				<td><a href="https://forums.mulesoft.com/index.html">Community Forum</a></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="container" id="mainContent">
+
+		<div class="contentHeading">
+			<h4>Anypoint Platform Operations: Runtime Fabric</h4>
+			<hr />
+		</div>
+
+		<!-- Temporary view "Loading data" -->
+		<div id="loadingView" class="container">
+			<table class="dialog">
+				<tr class="dialogheader"><td>Info</td></tr>
+				<tr><td>Gathering statistics. Please wait...</td></tr>
+			</table>
+		</div>
+
+		<!-- Processing results view -->
+		<div id="statsResultsView" class="container" ng-controller="memstatsController" style="visibility: hidden">
+			<div>
+				<h4>JVM Memory Statistics</h4>
+			</div>
+			<table id="statsResultsTable" class="table table-striped table-condensed">
+				<thead>
+					<tr class="thead">
+						<th align="center" width="200" ><font color='#ffffff'>Parameter</font></th>
+						<th align="center"><font color='#ffffff'>Value</font></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="line">JVM Total Memory</td>
+						<td class="line">{{results['JVM total memory']}}</td>
+					</tr>
+					<tr>
+						<td class="line">JVM Used Memory</td>
+						<td class="line">{{results['JVM used memory']}}</td>
+					</tr>
+					<tr>
+						<td class="line">JVM Free Memory</td>
+						<td class="line">{{results['JVM free memory']}}</td>
+					</tr>
+					<tr>
+						<td class="line">Heap Max Size</td>
+						<td class="line">{{results['Heap max size']}}</td>
+					</tr>
+					<tr>
+						<td class="line">Heap Init Size</td>
+						<td class="line">{{results['Heap init size']}}</td>
+					</tr>
+					<tr>
+						<td class="line">Heap Committed</td>
+						<td class="line">{{results['Heap commited']}}</td>
+					</tr>
+					<tr>
+						<td class="line">Heap Used Size</td>
+						<td class="line">{{results['Heap used size']}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+
+</body>
+</html>

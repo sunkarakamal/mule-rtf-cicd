@@ -1,0 +1,224 @@
+@import 'http://fonts.googleapis.com/css?family=Ubuntu:300,400';
+
+html {
+   font-family: Arial, sans-serif;
+   font-size: 100%;
+   -ms-text-size-adjust: 100%;
+   -webkit-text-size-adjust: 100%;
+   line-height: 1.5em;
+   box-sizing: border-box;
+   text-rendering: optimizeLegibility;
+   -webkit-font-smoothing: antialiased;
+   color: #000
+}
+
+hr {
+   border-color: #77BC1F;
+}
+
+table {
+   /*font-family: 'Ubuntu';*/
+   font-size: 13;
+   color: #000;
+}
+
+tr.divider_grey {
+   background-color: #EEE;
+   height: 20px
+}
+
+tr.divider_white {
+   height: 20px
+}
+
+tr.divider_line {
+   height: 10px;
+   border-bottom-style: solid;
+   border-bottom-width: 1px;
+   border-bottom-color: #ddd
+}
+
+tr.divider_dotted {
+   background: url(http://training.mulesoft.com/css/theme/images/dot-blue.png) repeat-x bottom;
+   border: none
+}
+
+th {
+   color: #FFFFFF;
+}
+
+td {
+   padding: 10px
+}
+
+td.left {
+   width: 150px;
+   text-align: right
+}
+
+td.right {
+   width: 500px
+}
+
+td.footer {
+   text-align: right;
+   border-top-style: solid;
+   border-top-width: 1px;
+   border-top-color: #77BC1F;
+   padding: 10px
+}
+
+input.plaintext {
+   width: 250px;
+}
+
+a:link {
+   color: #000
+}
+
+a:visited {
+   color: #000
+}
+
+a:hover {
+   color: #34c1fd
+}
+
+.title-bar-logo {
+   padding-right: 10px;
+   height: 35px;
+}
+
+
+#title-bar {
+   background-color: #323031;
+   /*font-family: Ubuntu;*/
+   font-size: 1.5em;
+   font-weight: 300;
+   padding: .5em 0;
+   color: #fff;
+   padding-left: 30;
+}
+
+#sub-title-bar {
+   background-color: #fff;
+   /*font-family: Ubuntu;*/
+   font-size: 1em;
+   font-weight: 300;
+   padding: .25em 0;
+   color: #414042;
+   border-bottom: solid;
+   border-bottom-width: 1px;
+   border-bottom-color: #77BC1F;
+   margin-bottom: 0;
+   padding-left: 20;
+}
+
+.contentHeading {
+   padding: 1.5em 0;
+   /*font-family: Ubuntu;*/
+   font-weight: 300
+}
+
+.contentHeadingLeft {
+   display: inline-block;
+   vertical-align: top
+}
+
+.contentHeadingRight {
+   margin-left: 1.25em;
+   display: inline-flex;
+   vertical-align: top
+}
+
+.btn_green {
+   display: block;
+   background: #77BC1F;
+   color: #fff;
+   width: 150px;
+   text-align: center;
+   padding: 5px 0;
+   border-style: none;
+}
+
+.btn_green:hover {
+   color: #fff;
+   background: #009444
+}
+
+.line {
+   font-size: 13px;
+   border-style: solid;
+   border-color: #e0e0e0;
+   border-width: 1;
+   border-collapse: collapse;
+   padding: 5px;
+   text-align: left;
+}
+
+.thead {
+   color: #ffffff;
+   background-color: #337ab7;
+   border-style: solid;
+   border-width: 1;
+   border-color: #337ab7;
+}
+
+.thead_item {
+   font-size: 13px;
+   /*font-family: Ubuntu;*/
+   color: #FFFFFF;
+}
+
+.dialog {
+   height: 100px;
+   width: 300px;
+   font-size: 18px;
+   border-style: none;
+   border-color: #77BC1F;
+   border-width: 1px;
+   text-align: center;
+   background-color: white;
+   box-shadow: 15px 15px 15px #b9b9b9;
+   margin: 0 auto;
+}
+
+.dialogheader {
+   height: 30px;
+   width: 300px;
+   font-size: 13px;
+   background-color: #77BC1F;
+   text-align: left;
+   color: white
+}
+
+.loginpanel {
+   height: 250px;
+   width: 400px;
+   border-style: single;
+   border-collapse: collapse;
+   text-align: left;
+   background-color: #ffffff;
+   box-shadow: 15px 15px 15px #b9b9b9;
+   margin: 0 auto;
+   margin-top: 20;   
+   padding: 5px 30px 5px 30px;
+}
+
+.loginpanel input[type=text], input[type=password] {
+  height: 35px;
+  font-size: 14px;
+}
+
+.loginpanel button {
+  width: 100%;
+}
+
+
+.white-bg {
+   background-color: #FFFFFF;
+}
+
+.grey-bg {
+   background-color : #f9f9f9;
+}

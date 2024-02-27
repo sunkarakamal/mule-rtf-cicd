@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+    xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+    xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+
+    <!--
+    Usage:
+    curl -i http://<hostname>:8081/store -XPUT
+    curl -i http://<hostname>:8081/retrieve
+    curl -i http://<hostname>:8081/clear -XDELETE
+    -->
+
+    <os:config name="os-conf" />
+    <os:object-store name="os-persistent-msgs" config-ref="os-conf" />
+
+    <flow name="api-store">
+        <http:listener path="/store" allowedMethods="POST, PUT" outputMimeType="text/plain" config-ref="http-conf" />
+
+        <flow-ref name="assemble-this-node-id" target="thisNode" />
+        <flow-ref name="store-to-oss" />
+        <flow-ref name="retrieve-from-oss" />
+    </flow>
+
+    <flow name="api-retrieve">
+        <http:listener path="/retrieve" allowedMethods="GET, POST" config-ref="http-conf" />
+
+        <flow-ref name="assemble-this-node-id" target="thisNode" />
+        <flow-ref name="retrieve-from-oss" />
+    </flow>
+
+    <flow name="api-clear">
+        <http:listener path="/clear" allowedMethods="PUT, POST, DELETE" config-ref="http-conf" />
+
+        <flow-ref name="assemble-this-node-id" target="thisNode" />
+        <flow-ref name="clear-oss" />
+        <flow-ref name="retrieve-from-oss" />
+    </flow>
+
+    <sub-flow name="assemble-this-node-id">
+        <set-payload value="#[server.ip ++ '/' ++ mule.clusterId ++ '/' ++ mule.nodeId]" mimeType="text/plain" />
+        <logger message="This node: #[payload]" />
+    </sub-flow>
+
+    <sub-flow name="store-to-oss">
+        <set-variable variableName="key" value="#[(now() as Number) as String]" />
+        <set-variable variableName="val" value="#[(vars.thisNode) as String]" />
+        <os:store key="#[vars.key]" objectStore="os-persistent-msgs">
+            <os:value><![CDATA[#[vars.val]]]></os:value>
+        </os:store>
+        <logger message="Stored into OSs on node #[vars.thisNode] : #[vars.key] = #[vars.val]" />
+    </sub-flow>
+
+    <sub-flow name="retrieve-from-oss">
+        <os:retrieve-all objectStore="os-persistent-msgs" target="persistentOSContents" />
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+                output application/yaml
+                ---
+                {
+                    thisNode:     vars.thisNode,
+                    persistentOS: vars.persistentOSContents
+                }]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <logger message="Retrieved from OSs on node #[vars.thisNode]: #[payload]" />
+    </sub-flow>
+
+    <sub-flow name="clear-oss">
+        <os:clear objectStore="os-persistent-msgs" />
+        <logger message="Cleared OSs on node #[vars.thisNode]" />
+    </sub-flow>
+
+</mule>

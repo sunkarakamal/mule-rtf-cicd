@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+    xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+
+    <!--
+    Usage:
+    in browser open:
+    http://localhost:8081/process
+    http://localhost:8081/memory
+    
+    or:
+    curl http://localhost:8081/api/process
+    curl http://localhost:8081/api/memory
+    -->
+
+    <flow name="api-process">
+        <http:listener path="/api/process" allowedMethods="GET" config-ref="http-conf" />
+
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+                output application/json
+                import * from dw::Runtime
+                var processingTime = randomInt(800) + 200
+                ---
+                {
+                    clusterID:      mule.clusterId,
+                    clusterNode:    mule.nodeId,
+                    applicationID:  app.name,
+                    ipAddress:      server.ip,
+                    processingTime: processingTime as String {format: "#"} as Number
+                } wait (processingTime)]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <logger message="#[payload]" />
+    </flow>
+
+    <flow name="webui-process">
+        <http:listener path="/process" allowedMethods="GET" config-ref="http-conf" />
+
+        <parse-template location="web/process.html" />
+    </flow>
+
+    <flow name="api-memory">
+        <http:listener path="/api/memory" allowedMethods="GET" config-ref="http-conf" />
+
+        <ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+                output application/json
+                import java!com::mulesoft::training::components::MemoryInfoComponent
+                ---
+                MemoryInfoComponent::getMemoryStats()]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <logger message="#[payload]" />
+    </flow>
+
+    <flow name="webui-memory">
+        <http:listener path="/memory" allowedMethods="GET" config-ref="http-conf" />
+
+        <parse-template location="web/memory.html" />
+    </flow>
+
+</mule>

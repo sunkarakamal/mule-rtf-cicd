@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+    xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+
+    <flow name="api-welcome">
+        <http:listener path="/api/welcome" allowedMethods="GET" config-ref="http-conf" />
+
+        <set-payload value="Welcome to Runtime Fabric!" mimeType="application/json" />
+        <logger message="#[message.payload]" />
+    </flow>
+
+    <flow name="webui-welcome">
+        <http:listener path="/welcome" config-ref="http-conf" />
+
+        <parse-template location="web/welcome.html" outputMimeType="text/html" />
+    </flow>
+
+    <flow name="api-version">
+        <http:listener path="/api/version" allowedMethods="GET" config-ref="http-conf" />
+
+        <set-variable variableName="version" value="${app.version}" />
+        <set-payload value="#[output text/plain --- 'This is version ' ++ vars.version]" />
+        <logger message="#[message.payload]" />
+    </flow>
+
+    <flow name="webui-version">
+        <http:listener path="/version" allowedMethods="GET" config-ref="http-conf" />
+
+        <set-variable variableName="version" value="${app.version}" />
+        <parse-template location="web/version.html" />
+    </flow>
+
+</mule>

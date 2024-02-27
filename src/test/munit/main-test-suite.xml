@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  MuleSoft Training - Anypoint Platform Development: Level 2
+  %%
+  Copyright (C) 2019 - 2021 MuleSoft, Inc. All rights reserved. http://www.mulesoft.com
+  %%
+  The software in this package is published under the terms of the
+  Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International Public License,
+  a copy of which has been included with this distribution in the LICENSE.txt file.
+  #L%
+  -->
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="  http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd  http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd  http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+  <munit:config name="main-test-suite.xml"/>
+  <munit:before-suite name="main-test-suiteBefore_Suite" description="Setting up test suite">
+    <logger message="Before Test Suite" level="INFO" doc:name="Logger"/>
+  </munit:before-suite>
+  <munit:after-suite name="main-test-suiteAfter_Suite" description="Tearing down test suite">
+    <logger message="After Test Suite" level="INFO" doc:name="Logger"/>
+  </munit:after-suite>
+  <munit:before-test name="main-test-suiteBefore_Test" description="Setting up individual test">
+    <logger message="Before Test" level="INFO" doc:name="Logger"/>
+  </munit:before-test>
+  <munit:after-test name="main-test-suiteAfter_Test" description="Tearing down individual test">
+    <logger message="After Test" level="INFO" doc:name="Logger"/>
+  </munit:after-test>
+  <munit:test name="main-test-suite-main" description="Test">
+    <munit:behavior>
+      <logger message="No input to prepare" level="DEBUG" doc:name="Logger"/>
+    </munit:behavior>
+    <munit:execution>
+      <logger message="Execute main flow here" level="DEBUG" doc:name="Logger"/>
+    </munit:execution>
+    <munit:validation>
+      <munit-tools:assert-that expression="#[true]" is="#[MunitTools::equalTo(true)]" doc:name="Always true"/>
+    </munit:validation>
+  </munit:test>
+</mule>

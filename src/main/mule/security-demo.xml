@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+    xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+
+    <flow name="api-security-get">
+        <http:listener path="/api/security" allowedMethods="GET" config-ref="http-conf" />
+
+        <set-payload value="Security demo API - GET request received!" mimeType="text/plain" />
+        <logger message="#[payload]" />
+    </flow>
+
+    <flow name="api-security-post">
+        <http:listener path="/api/security" allowedMethods="POST" config-ref="http-conf" />
+
+        <set-payload value="Security demo API - POST request received!" mimeType="text/plain" />
+        <logger message="#[payload]" />
+    </flow>
+
+    <flow name="api-security-put">
+        <http:listener path="/api/security" allowedMethods="PUT" config-ref="http-conf" />
+
+        <set-payload value="Security demo API - PUT request received!" mimeType="text/plain" />
+        <logger message="#[payload]" />
+    </flow>
+
+    <flow name="api-security-delete">
+        <http:listener path="/api/security" allowedMethods="DELETE" config-ref="http-conf" />
+
+        <set-payload value="Security demo API - DELETE request received!" mimeType="text/plain" />
+        <logger message="#[payload]" />
+    </flow>
+
+</mule>
