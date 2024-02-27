@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 	
     <!-- Change the group ID with the class group -->
-    <groupId>YOUR-ORG-ID</groupId>
-    <artifactId>YOURPREFIX-rtf-unified-app</artifactId>
-    <version>SEMANTIC-VERSION</version>
+    <groupId>794e77cc-5fed-4127-a727-4e957d35242a</groupId>
+    <artifactId>sample-rtf-unified-app</artifactId>
+    <version>1.0</version>
 	
     <packaging>mule-application</packaging>
-    <name>YOURPREFIX-rtf-unified-app</name>
+    <name>sample-rtf-unified-app</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
