@@ -63,3 +63,73 @@ jobs:
       # maven build command, could add other flags if needed
       - name: Build
         run: mvn -B clean package --file pom.xml  
+
+
+ # Step to upload the artifact to Exchange
+  exchange:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:    
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - uses: s4u/maven-settings-action@v2.6.0
+      with:
+        servers: |
+          [{
+              "id": "anypoint-exchange-v3",
+              "username": "${{ secrets.ANYPOINT_USERNAME }}",
+              "password": "${{ secrets.ANYPOINT_PASSWORD }}"
+          },
+          {
+              "id": "rtfk.repository",
+              "username": "${{ secrets.ANYPOINT_USERNAME }}",
+              "password": "${{ secrets.ANYPOINT_PASSWORD }}"
+          },
+          {
+                "id": "mulesoft-releases",
+                "username": "${{ secrets.RELEASES_USERNAME }}",
+                "password": "${{ secrets.RELEASES_PASSWORD }}"
+            }]
+    - name: Publish artifact to Exchange
+      run: |
+        mvn -B clean deploy --file pom.xml
+            
+# Steps for executing the deployment against RTF Anypoint Platform
+  deploy:
+    needs: exchange
+    runs-on: ubuntu-latest
+    steps:    
+    - uses: actions/checkout@v3
+    - uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+          
+    - uses: s4u/maven-settings-action@v2.6.0
+      with:
+        servers: |
+          [{
+              "id": "anypoint-exchange-v3",
+              "username": "${{ secrets.ANYPOINT_USERNAME }}",
+              "password": "${{ secrets.ANYPOINT_PASSWORD }}"
+          },
+          {
+                "id": "rtfk.repository",
+                "username": "${{ secrets.ANYPOINT_USERNAME }}",
+                "password": "${{ secrets.ANYPOINT_PASSWORD }}"
+          }]
+    - name: Deploy to RTF
+      env:
+        AUTHOR: "Mr Developer"
+      run: |
+        mvn clean deploy --file pom.xml -DmuleDeploy \
+        -Dusername="${{ secrets.ANYPOINT_USERNAME }}" -Dpassword="${{ secrets.ANYPOINT_PASSWORD }}" \
+        -Drtf.app.name="sampleapp1" -Dapp.inbound.url="http://sampleapp1.mulesoft-training.com/" \
+        -Ddeployment.target="rtfstudent6cluster"     
