@@ -6,7 +6,7 @@
     <!-- Change the group ID with the class group -->
     <groupId>794e77cc-5fed-4127-a727-4e957d35242a</groupId>
     <artifactId>sample-rtf-unified-app</artifactId>
-    <version>v1-0</version>
+    <version>v1</version>
 	
     <packaging>mule-application</packaging>
     <name>sample-rtf-unified-app</name>
